@@ -51,5 +51,6 @@ public class Task3 {
             if (was_operation) break;
         }    
         System.out.printf("%d %s %d = %f", (int)first_num, operation, (int)second_num, result);
+        input_from_user.close();
     }
 }

@@ -18,5 +18,6 @@ public class Task1 {
             multiply *= i;
         }
         System.out.printf("Сумма - %d, произведение - %d", summ, multiply);
+        input_number.close();
     }
 }
