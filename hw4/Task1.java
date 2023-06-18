@@ -33,7 +33,7 @@ public class Task1 {
 
         int result_multi = Integer.parseInt(number_1) * Integer.parseInt(number_2);
         int result_summ = Integer.parseInt(number_1) + Integer.parseInt(number_2);
-        System.out.printf("Произведение - %d\nСумма - %d\n", result_multi, result_summ);
+        System.out.printf("Произведение: %,d\nСумма: %,d\n", result_multi, result_summ);
 
         LinkedList<String> result_multi_ll = modif_string_to_ll(result_multi);
         LinkedList<String> result_summ_ll = modif_string_to_ll(result_summ); 
@@ -42,7 +42,7 @@ public class Task1 {
     public static LinkedList<String> modif_string_to_ll(int number) {
         List<String> num_list = Arrays.asList(Integer.toString(number).split(""));
         LinkedList<String> my_l_list = new LinkedList<>(num_list);
-        System.out.printf("Результат связным списком - %s\n", my_l_list);
+        System.out.printf("Результат связным списком: %s\n", my_l_list);
         return my_l_list;
     }
 
@@ -52,7 +52,7 @@ public class Task1 {
             // sb.append(String.format("%d", deque_num.pollLast()));
             sb.append(deque_num.pollLast().toString());
         }
-        System.out.printf("Число - %s\n", sb);
+        System.out.printf("Число: %,d\n", Integer.parseInt(sb.toString()));
         return sb.toString();
     }
 
@@ -62,7 +62,7 @@ public class Task1 {
         for (int index = 0; index <= rnd.nextInt(9) ; index++) {
             digits.add(rnd.nextInt(9));
         }
-        System.out.printf("Цифры в Deque - %s\n", digits);
+        System.out.printf("Цифры в Deque: %s\n", digits);
         return digits;
     }
 }
