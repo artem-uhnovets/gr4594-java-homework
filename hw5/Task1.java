@@ -27,7 +27,6 @@ package HomeWorks.hw5;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -38,37 +37,11 @@ import java.util.Scanner;
 public class Task1 {
     public static void main(String[] args) throws IOException {
 
-        // String pathDir = System.getProperty("user.dir");
-        // String pathFileName = pathDir.concat("\\Task1.txt");
-        // File phonebookFile = new File(pathFileName);
-
-        // // FileWriter fileWr = new FileWriter(phonebookFile, false);
-
-        // BufferedReader buffReader = new BufferedReader(new FileReader(phonebookFile));
-        // String str;
-
-        // Map<String, String> phonebookMAP = new HashMap<>();
-
-        // while ((str = buffReader.readLine()) != null) {
-        //     phonebookMAP.put(str.split(":")[0], str.split(":")[1]);
-        // }
-        // buffReader.close();
-
-        // phonebookMAP.put("Иванов", "123, 1234, 12345, 123456");
-        // phonebookMAP.put("Петров", " ");
-        
-        // Scanner input_data = new Scanner(System.in, "cp866");
-        // System.out.printf("Введите новый контакт: ");
-        // String num = input_data.nextLine();
-
-        // addContact(phonebookMAP, num);
-
-        // printHasMap(phonebookMAP);
-
         mainMenu();
+
     }
 
-    private static void mainMenu() throws IOException {
+    public static void mainMenu() throws IOException {
         Map<String, String> phonebookMAP = fileToHashMap();
         Scanner input_data = new Scanner(System.in, "cp866");
         while (true) {
@@ -87,15 +60,17 @@ public class Task1 {
                     printHasMap(phonebookMAP);
                     break;
                 case "3":
+                    input_data.close();
                     System.exit(0);            
                 default:
+                    System.out.println(repeat(80, "="));
                     System.out.println("Ошибка! Неверный ввод.");
-                    // System.exit(0); 
-            }
+                    System.out.println(repeat(80, "="));
+            }       
         }
     }
 
-    private static Map<String, String> fileToHashMap() throws IOException {
+    public static Map<String, String> fileToHashMap() throws IOException {
         String pathDir = System.getProperty("user.dir");
         String pathFileName = pathDir.concat("\\Task1.txt");
         File phonebookFile = new File(pathFileName);
@@ -103,8 +78,6 @@ public class Task1 {
         if (phonebookFile.createNewFile()) {
             System.out.println("Создание новой телефонной книги!");
         }
-
-        // FileWriter fileWr = new FileWriter(phonebookFile, false);
 
         BufferedReader buffReader = new BufferedReader(new FileReader(phonebookFile));
         String str;
@@ -119,67 +92,26 @@ public class Task1 {
     }
 
     public static void printHasMap(Map<String, String> hashmap) {
+        System.out.println(repeat(80, "="));
         for (var contact : hashmap.entrySet()) {
             System.out.printf("%s: %s\n", contact.getKey(), contact.getValue());
         }
+        System.out.println(repeat(80, "="));
     }
 
-    // public static void addContact(Map<String, String> phonebook, String contactToAdd) {
-    //     // if (contactToAdd.split(" ").length == 1) {
-    //     //     System.out.println("Не введен номер телефона!");
-    //     // }
-    //     String[] contact = contactToAdd.split(" ");
-    //     String name = contact[0].trim();
-    //     String phonenumber = contact[1].trim();
-
-    //     boolean isNameExist = phonebook.containsKey(name);
-    //     boolean isPhoneExist = false;
-    //     if (isNameExist) {
-    //         if (!phonebook.get(name).isEmpty() && !phonebook.get(name).equals(" ")) {
-    //             String phonesLine = phonebook.get(name);
-    //             String[] phones = phonesLine.replaceAll(",", "").split(" ");
-
-    //             for (String number : phones) {
-    //                 if (number.equalsIgnoreCase(phonenumber)) {
-    //                 isPhoneExist = true;
-    //                 }
-    //             }
-
-    //             if (!isPhoneExist) {
-    //                 // phonebook.put(name, String.format("%s, %s", phonesLine, phonenumber));
-    //                 phonebook.put(name, phonesLine.concat(String.format(", %s", phonenumber)));
-    //             }
-    //         } else {
-    //             // phonebook.put(name, String.format("%s", phonenumber));
-    //             phonebook.put(name, phonenumber);
-    //         }
-    //     } else {
-    //         // phonebook.put(name, String.format("%s", phonenumber));
-    //         phonebook.put(name, phonenumber);
-    //     }
-    // }
-
     public static void addContact(Map<String, String> phonebook, String contactToAdd) throws IOException {
-
         String pathDir = System.getProperty("user.dir");
         String pathFileName = pathDir.concat("\\Task1.txt");
         File phonebookFile = new File(pathFileName);
 
         FileWriter fileWr = new FileWriter(phonebookFile, false);
 
-        // BufferedReader buffReader = new BufferedReader(new FileReader(phonebookFile));
-
-
-        // if (contactToAdd.split(" ").length == 1) {
-        //     System.out.println("Не введен номер телефона!");
-        // }
         String[] contact = contactToAdd.split(" ");
         String name = contact[0].trim();
         String phonenumber = contact[1].trim();
 
         boolean isNameExist = phonebook.containsKey(name);
         boolean isPhoneExist = false;
-        boolean wasAdded = false;
         if (isNameExist) {
             if (!phonebook.get(name).isEmpty() && !phonebook.get(name).equals(" ")) {
                 String phonesLine = phonebook.get(name);
@@ -192,32 +124,35 @@ public class Task1 {
                 }
 
                 if (!isPhoneExist) {
-                    // phonebook.put(name, String.format("%s, %s", phonesLine, phonenumber));
+                    System.out.println(repeat(80, "="));
                     System.out.printf("К существующему контакту %s\nC номерами телефонов %s\nДобавлен номер %s\n", name, phonesLine, phonenumber);
                     phonebook.put(name, phonesLine.concat(String.format(", %s", phonenumber)));
-                    wasAdded = true;
+                    System.out.println(repeat(80, "="));
+                } else {
+                    System.out.println(repeat(80, "="));
+                    System.out.printf("Введенный контакт %s, с номером %s уже существует\n", name, phonenumber);
+                    System.out.println(repeat(80, "="));
                 }
             } else {
-                // phonebook.put(name, String.format("%s", phonenumber));
+                System.out.println(repeat(80, "="));
                 System.out.printf("У контакта %s отсутствовали номера телефонов\nДобавлен номер %s\n", name, phonenumber);
                 phonebook.put(name, phonenumber);
-                wasAdded = true;
-
+                System.out.println(repeat(80, "="));
             }
         } else {
-            // phonebook.put(name, String.format("%s", phonenumber));
+            System.out.println(repeat(80, "="));
             System.out.printf("Добавлен новый контакт %s: %s\n", name, phonenumber);
             phonebook.put(name, phonenumber);
-            wasAdded = true;
+            System.out.println(repeat(80, "="));
         }
-
-        if (wasAdded) {
-            for (var contactLine : phonebook.entrySet()) {
-                fileWr.write(String.format("%s: %s\n", contactLine.getKey().trim(), contactLine.getValue().trim()));
-            }
-            
+        for (var contactLine : phonebook.entrySet()) {
+            fileWr.write(String.format("%s: %s\n", contactLine.getKey().trim(), contactLine.getValue().trim()));
         }
         fileWr.flush();
         fileWr.close();
+    }
+
+    public static String repeat(int count, String with) {
+        return new String(new char[count]).replace("\0", with);
     }
 }
