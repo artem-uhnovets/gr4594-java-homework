@@ -57,7 +57,7 @@ public class Task1 {
                     addContact(phonebookMAP, contact_input);
                     break;
                 case "2":
-                    printHasMap(phonebookMAP);
+                    printHashMapSorted(phonebookMAP);
                     break;
                 case "3":
                     input_data.close();
@@ -91,12 +91,38 @@ public class Task1 {
         return phonebookMAP;
     }
 
-    public static void printHasMap(Map<String, String> hashmap) {
+    public static void printHashMap(Map<String, String> hashmap) {
         System.out.println(repeat(80, "="));
         for (var contact : hashmap.entrySet()) {
             System.out.printf("%s: %s\n", contact.getKey(), contact.getValue());
         }
         System.out.println(repeat(80, "="));
+    }
+
+    public static void printHashMapSorted(Map<String, String> hashmap) {
+        String[] contactByPhones = new String[hashmap.size()];
+        int index = 0;
+        int countPhonesI = 0;
+        int countPhonesJ = 0;
+        String temp = "";
+        System.out.println(repeat(80, "="));
+        for (var contact : hashmap.entrySet()) {
+            contactByPhones[index++] = String.format("%s: %s", contact.getKey().trim(), contact.getValue().trim());
+        }
+        for (int i = 0; i < contactByPhones.length; i++) {
+            countPhonesI = contactByPhones[i].split(":")[1].split(",").length;
+            for (int j = i + 1; j < contactByPhones.length; j++) {
+                countPhonesJ = contactByPhones[j].split(":")[1].split(",").length;
+                if (countPhonesJ > countPhonesI) {
+                    temp = contactByPhones[j];
+                    contactByPhones[j] = contactByPhones[i];
+                    contactByPhones[i] = temp;
+                }
+            }
+            System.out.println(contactByPhones[i]);
+        }
+        System.out.println(repeat(80, "="));
+
     }
 
     public static void addContact(Map<String, String> phonebook, String contactToAdd) throws IOException {
