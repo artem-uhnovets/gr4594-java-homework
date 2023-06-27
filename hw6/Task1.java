@@ -26,118 +26,107 @@ NoteBook notebook5 = new NoteBook
 
 package HomeWorks.hw6;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+
+import HomeWorks.hw6.Shop.Notebook;
+
 class Shop {
-    class Notebook{
-        Brandname brandname;
-        Category category;
-        ScreenSize screenSize;
-        Resolution resolution;
-        DisplayRate displayRate;
-        Processor processor;
-        RAM ram;
-        Videocard videocard;
-        HDD hdd;
-        OS os;
-        Color color;
+    // Notebook[] notebooks;
+    List<Notebook> notebookArrayList;
 
-        enum Brandname{
-            Apple,
-            Acer,
-            ASUS,
-            HUAWEI,
-            Lenovo,
-            Microsoft,
-            Xiaomi,
-            GIGABYTE,
-            MSI,
-            Samsung
+    public class Notebook{
+        String brandname;
+        int screenSizeInch;
+        int displayRate;
+        String processor;
+        int ramVolume;
+        String videocard;
+        Integer hddVolume;
+        String os;
+        String color;
+
+        public Notebook(String brandname, int screenSizeInch, int displayRate, String processor, int ramVolume, String videocard, Integer hddVolume, String os, String color) {
+            this.brandname = brandname;
+            this.screenSizeInch = screenSizeInch;
+            this.displayRate = displayRate;
+            this.processor = processor;
+            this.ramVolume = ramVolume;
+            this.videocard = videocard;
+            this.hddVolume = hddVolume;
+            this.os = os;
+            this.color = color;
         }
 
-        enum Category{
-            Ordinary,
-            Gaming,
-            Tablet,
-            Transformer
+        public Notebook(String brandname){
+            this.brandname = brandname;
         }
 
-        enum ScreenSize{
-            Mini,      // < 10,1
-            Portable,  // 10,1 11,6, 12,5, 13,3,
-            Universal, // 14,1, 15,6,
-            Huge       // > 17,3 18,4 
+        public Notebook(){
+
         }
 
-        enum Resolution{
-            HD,     // 720
-            FullHD, // 1080
-            QHD,    // 1440
-            UHD     // 2160
+        @Override
+        public String toString() {
+            // return ""+brandname+" "+screenSizeInch+" "+displayRate+" "+processor+" "+ramVolume+" "+videocard+" "+hddVolume+" "+os+" "+color+"";
+            return ""+brandname+"|"+screenSizeInch+"|"+displayRate+"|"+processor+"|"+ramVolume+"|"+videocard+"|"+hddVolume+"|"+os+"|"+color+"";
         }
-
-        enum DisplayRate{
-            Hz60,
-            Hz120,
-            Hz144,
-            Hz240
-        }
-
-        enum Processor{
-            Apple,
-            Intel,
-            AMD
-        }
-
-        enum RAM{
-            Gb8,
-            Gb16,
-            Gb32,
-            Gb64,
-            Gb128
-        }
-
-        enum Videocard{
-            Intel,
-            NVIDIA,
-            AMD
-        }
-
-        enum HDD{
-            Tb1,
-            Tb2,
-            Tb4,
-            Tb8
-        }
-
-        enum OS{
-            Linux,
-            MacOS,
-            Windows,
-            DOS,
-            None
-        }
-
-        enum Color{
-            Red,
-            Yellow,
-            Green,
-            Blue,
-            Black,
-            White,
-            Silver,
-            Gold,
-            Grey
-        }
-
-
-
     }
+
+    public void print() {
+        int maxStrLength = 0;
+        StringBuilder line = new StringBuilder("");
+        String title = "|brandname|screenSizeInch|displayRate|processor|ramVolume|videocard|hddVolume|os|color|";
+        String textAlign = "|:----|:----|:----|:----|:----|:----|:----|:----|:----|";
+        System.out.println(title);
+        System.out.println(textAlign);
+        for (Notebook notebook : this.notebookArrayList) {
+            if (notebook.toString().length() > maxStrLength) {
+                maxStrLength = notebook.toString().length();
+            }
+            System.out.println(notebook);
+        }
+        for (int i = 0; i < maxStrLength; i++) {
+            line.append("-");
+        }
+        System.out.println(line.toString());
+    } 
+
+    public List<Notebook> insertRandom(int quantity) {
+        Notebook[] notebooksRnd = new Notebook[quantity];
+        this.notebookArrayList = Arrays.asList(notebooksRnd);
+        Random rnd = new Random();
+
+        String[] brands = new String[] {"Apple", "Acer", "ASUS", "HUAWEI", "Lenovo", "Microsoft", "Xiaomi", "GIGABYTE", "MSI", "Samsung"};
+        Integer[] screenSize = new Integer[] {10, 11, 12, 13, 14, 15, 16, 17, 18};
+        Integer[] displayRate = new Integer[] {50, 60, 100, 120, 144, 240};
+        String[] processor = new String[] {"Apple", "Intel", "AMD"};
+        Integer[] ramVolume = new Integer[] {4, 8, 16, 32, 64, 128, 256};
+        String[] videocard = new String[] {"Intel", "AMD", "NVIDIA"};
+        Integer[] hddVolume = new Integer[] {1, 2, 4, 8, 16, 32};
+        String[] os = new String[] {"MacOS", "Linux", "Windows", "DOS", "None"};
+        String[] color = new String[] {"Red", "Yellow", "Green", "Blue", "Black", "White", "Silver", "Gold", "Grey"};
+
+        for (int i = 0; i < quantity; i++) {
+            notebooksRnd[i] = new Notebook(brands[rnd.nextInt(brands.length)], screenSize[rnd.nextInt(screenSize.length)], displayRate[rnd.nextInt(displayRate.length)], processor[rnd.nextInt(processor.length)], ramVolume[rnd.nextInt(ramVolume.length)], videocard[rnd.nextInt(videocard.length)], hddVolume[rnd.nextInt(hddVolume.length)], os[rnd.nextInt(os.length)], color[rnd.nextInt(color.length)]);
+        }
+        
+        return this.notebookArrayList;
+    }
+
+       
+
 }
 
 
 public class Task1 {
     public static void main(String[] args) {
-        Notebook note1 = new Notebook();
-        note1.brandname = Brandname.Lenovo;
+        Shop electronic = new Shop(); 
+        electronic.insertRandom(100);
+        electronic.print();
         
     }
 }
