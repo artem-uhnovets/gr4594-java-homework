@@ -1,4 +1,5 @@
-/* Подумать над структурой класса Ноутбук для магазина техники - выделить поля и методы. Реализовать в java.
+/*
+Подумать над структурой класса Ноутбук для магазина техники - выделить поля и методы. Реализовать в java.
 Создать множество ноутбуков.
 Написать метод, который будет запрашивать у пользователя критерий фильтрации и выведет ноутбуки, отвечающие фильтру.
 NoteBook notebook1 = new NoteBook
@@ -22,23 +23,25 @@ NoteBook notebook5 = new NoteBook
 приветствие
 Выбор параметра
 выбор конкретнее
-вывод подходящих */
+вывод подходящих
+*/
 
 package HomeWorks.hw6;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 
 import HomeWorks.hw6.Shop.Notebook;
 
+// import HomeWorks.hw6.Shop.Notebook;
+
 class Shop {
-    // Notebook[] notebooks;
     List<Notebook> notebookArrayList;
 
-    public class Notebook{
+    static class Notebook{
         String brandname;
         int screenSizeInch;
         int displayRate;
@@ -71,28 +74,41 @@ class Shop {
 
         @Override
         public String toString() {
-            // return ""+brandname+" "+screenSizeInch+" "+displayRate+" "+processor+" "+ramVolume+" "+videocard+" "+hddVolume+" "+os+" "+color+"";
-            return ""+brandname+"|"+screenSizeInch+"|"+displayRate+"|"+processor+"|"+ramVolume+"|"+videocard+"|"+hddVolume+"|"+os+"|"+color+"";
+            return ""+brandname+" "+screenSizeInch+" "+displayRate+" "+processor+" "+ramVolume+" "+videocard+" "+hddVolume+" "+os+" "+color+"";
         }
+
+
+        
+
     }
 
-    public void print() {
-        int maxStrLength = 0;
-        StringBuilder line = new StringBuilder("");
-        String title = "|brandname|screenSizeInch|displayRate|processor|ramVolume|videocard|hddVolume|os|color|";
-        String textAlign = "|:----|:----|:----|:----|:----|:----|:----|:----|:----|";
+    @Override
+    public String toString() {
+        StringBuilder line = new StringBuilder();
+        // for (Notebook notebook : notebookArrayList) {
+        //     line.append(notebook+"\n");
+        // }
+        try {
+            for (Notebook notebook : notebookArrayList) {
+                line.append(notebook+"\n");
+            }
+        } catch (Exception e) {
+            return "Пуст";
+        }
+        return line.toString();
+    }
+
+    public void printMarkdownTable() {
+        String title = "brandname|screenSizeInch|displayRate|processor|ramVolume|videocard|hddVolume|os|color";
+        String textAlign = ":----|:----|:----|:----|:----|:----|:----|:----|:----";
+        String row = "";
         System.out.println(title);
         System.out.println(textAlign);
+
         for (Notebook notebook : this.notebookArrayList) {
-            if (notebook.toString().length() > maxStrLength) {
-                maxStrLength = notebook.toString().length();
-            }
-            System.out.println(notebook);
+            row = notebook.toString().replaceAll(" ", "|");
+            System.out.println(row);
         }
-        for (int i = 0; i < maxStrLength; i++) {
-            line.append("-");
-        }
-        System.out.println(line.toString());
     } 
 
     public List<Notebook> insertRandom(int quantity) {
@@ -117,16 +133,155 @@ class Shop {
         return this.notebookArrayList;
     }
 
-       
+    // private List<Notebook> filterNoteString(int filter) {
+    //     List<Notebook> filtered = new ArrayList<>();
+    //     Scanner inputData = new Scanner(System.in);
+
+    //     System.out.printf("Какой критерий? - ");
+    //     String search = inputData.nextLine();
+    //     for (Notebook notebook : this.notebookArrayList) {
+    //         if (notebook.toString().split(" ")[filter-1].equalsIgnoreCase(search)) {
+    //             filtered.add(notebook);
+    //         }
+    //     }
+    //     return filtered;
+    // }
+
+    // private List<Notebook> filterNoteInt(int filter) {
+    //     List<Notebook> filtered = new ArrayList<>();
+    //     Scanner inputData = new Scanner(System.in);
+
+    //     System.out.printf("От какого значения - ");
+    //     int searchFrom = inputData.nextInt();
+    //     System.out.printf("До какого значения - ");
+    //     int searchTill = inputData.nextInt();
+    //     int searchCondition = -1;
+    //     for (Notebook notebook : this.notebookArrayList) {
+    //         searchCondition = Integer.parseInt(notebook.toString().split(" ")[filter-1]);
+    //         if (searchCondition >= searchFrom && searchCondition <= searchTill) {
+    //             filtered.add(notebook);
+    //         }
+    //     }
+    //     return filtered;
+    // }
+
+    private List<Notebook> filterNotebooks(int filter) {
+        List<Notebook> filtered = new ArrayList<>();
+        Scanner inputData = new Scanner(System.in);
+        if (filter == 1 || filter == 4 || filter == 6 || filter == 8 || filter == 9) {
+            String searchingPart = "";
+            System.out.printf("Какой критерий? - ");
+            String search = inputData.nextLine();
+            for (Notebook notebook : this.notebookArrayList) {
+                searchingPart = notebook.toString().split(" ")[filter-1].trim();
+                if (searchingPart.equalsIgnoreCase(search)) {
+                    filtered.add(notebook);
+                }
+            }
+        } else {
+            System.out.printf("От какого значения - ");
+            int searchFrom = inputData.nextInt();
+            System.out.printf("До какого значения - ");
+            int searchTill = inputData.nextInt();
+            int searchingPart = -1;
+            for (Notebook notebook : this.notebookArrayList) {
+                searchingPart = Integer.parseInt(notebook.toString().split(" ")[filter-1].trim());
+                if (searchingPart >= searchFrom && searchingPart <= searchTill) {
+                    filtered.add(notebook);
+                }
+            }
+        }
+        return filtered;
+    }
+
+    public List<Notebook> filter() {
+        // 1 brands
+        // 2 screenSize
+        // 3 displayRate
+        // 4 processor
+        // 5 ramVolume
+        // 6 videocard
+        // 7 hddVolume
+        // 8 os
+        // 9 color
+
+        Shop filtered = new Shop();
+        Scanner inputData = new Scanner(System.in);
+        System.out.println( "1. Бренд\n"+//
+                            "2. Диагональ экрана\n"+//
+                            "3. Частота Hz экрана\n"+//
+                            "4. Процессор\n"+//
+                            "5. Объем ОЗУ\n"+//
+                            "6. Видеокарта\n"+//
+                            "7. Объем HDD / SDD\n"+//
+                            "8. Операционная система\n"+//
+                            "9. Цвет\n");
+        System.out.printf("Выберите категорию поиска: ");
+        int filter = -1;
+        try {
+            filter = inputData.nextInt();
+        } catch (Exception e) {
+            System.out.println("Исключение");
+        }
+        if (1 <= filter && filter <= 9) {
+            filtered.notebookArrayList = this.filterNotebooks(filter);
+        } else {
+            System.out.println("Ошибка ввода!");
+        }
+
+        return filtered.notebookArrayList;
+    }
+
+    
 
 }
 
 
 public class Task1 {
     public static void main(String[] args) {
-        Shop electronic = new Shop(); 
-        electronic.insertRandom(100);
-        electronic.print();
+
+        MenuMain();
+
+    }
+
+    private static void MenuMain() {
+        Scanner inputData = new Scanner(System.in);
+        Shop shop = new Shop();
+        shop.insertRandom(100);
+        Shop filtered = new Shop();
+        int inputAction = -1;
+
+        System.out.println("Добро пожаловать!");
+        while (true) {
+            ActionsMenu();
+            System.out.printf("Выберите действие: ");
+            switch (inputAction = inputData.nextInt()) {
+                case 1:
+                    System.out.println(shop);
+                    break;
+                case 2:
+                    shop.printMarkdownTable();
+                    break;
+                case 3:
+                    filtered.notebookArrayList = shop.filter();
+                    System.out.println(filtered);
+                    break;    
+                case 4:
+                    inputData.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Ошибка!");
+                    break;
+            }
+        }
         
+    }
+
+    private static void ActionsMenu() {
+        System.out.println("1. Вывести все ноутбуки");
+        System.out.println("2. Вывести все ноутбуки для Markdown");
+        System.out.println("3. Отсортировать по критериям");
+        System.out.println("4. Выход");
+
     }
 }
