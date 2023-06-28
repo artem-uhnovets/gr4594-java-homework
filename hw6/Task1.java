@@ -30,7 +30,9 @@ package HomeWorks.hw6;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -93,7 +95,7 @@ class Shop {
                 line.append(notebook+"\n");
             }
         } catch (Exception e) {
-            return "Пуст";
+            return "Перечень ноутбуков пуст";
         }
         return line.toString();
     }
@@ -132,38 +134,6 @@ class Shop {
         
         return this.notebookArrayList;
     }
-
-    // private List<Notebook> filterNoteString(int filter) {
-    //     List<Notebook> filtered = new ArrayList<>();
-    //     Scanner inputData = new Scanner(System.in);
-
-    //     System.out.printf("Какой критерий? - ");
-    //     String search = inputData.nextLine();
-    //     for (Notebook notebook : this.notebookArrayList) {
-    //         if (notebook.toString().split(" ")[filter-1].equalsIgnoreCase(search)) {
-    //             filtered.add(notebook);
-    //         }
-    //     }
-    //     return filtered;
-    // }
-
-    // private List<Notebook> filterNoteInt(int filter) {
-    //     List<Notebook> filtered = new ArrayList<>();
-    //     Scanner inputData = new Scanner(System.in);
-
-    //     System.out.printf("От какого значения - ");
-    //     int searchFrom = inputData.nextInt();
-    //     System.out.printf("До какого значения - ");
-    //     int searchTill = inputData.nextInt();
-    //     int searchCondition = -1;
-    //     for (Notebook notebook : this.notebookArrayList) {
-    //         searchCondition = Integer.parseInt(notebook.toString().split(" ")[filter-1]);
-    //         if (searchCondition >= searchFrom && searchCondition <= searchTill) {
-    //             filtered.add(notebook);
-    //         }
-    //     }
-    //     return filtered;
-    // }
 
     private List<Notebook> filterNotebooks(int filter) {
         List<Notebook> filtered = new ArrayList<>();
@@ -207,7 +177,7 @@ class Shop {
 
         Shop filtered = new Shop();
         Scanner inputData = new Scanner(System.in);
-        System.out.println( "1. Бренд\n"+//
+        Message( "1. Бренд\n"+//
                             "2. Диагональ экрана\n"+//
                             "3. Частота Hz экрана\n"+//
                             "4. Процессор\n"+//
@@ -215,7 +185,7 @@ class Shop {
                             "6. Видеокарта\n"+//
                             "7. Объем HDD / SDD\n"+//
                             "8. Операционная система\n"+//
-                            "9. Цвет\n");
+                            "9. Цвет");
         System.out.printf("Выберите категорию поиска: ");
         int filter = -1;
         try {
@@ -226,16 +196,23 @@ class Shop {
         if (1 <= filter && filter <= 9) {
             filtered.notebookArrayList = this.filterNotebooks(filter);
         } else {
-            System.out.println("Ошибка ввода!");
+            Message("Ошибка ввода!");
         }
 
         return filtered.notebookArrayList;
     }
 
-    
+    private static String repeat(int count, String with) {
+        return new String(new char[count]).replace("\0", with);
+    }
+
+    private static void Message(String text) {
+        System.out.println(repeat(80, "="));
+        System.out.println(text);
+        System.out.println(repeat(80, "="));
+    }
 
 }
-
 
 public class Task1 {
     public static void main(String[] args) {
@@ -250,6 +227,10 @@ public class Task1 {
         shop.insertRandom(100);
         Shop filtered = new Shop();
         int inputAction = -1;
+        int countingFilter = 1;
+        Map<String, Shop> filterLogs = new HashMap<>();
+        // int inputLogNum = -1;
+        String inputLogNum = "";
 
         System.out.println("Добро пожаловать!");
         while (true) {
@@ -264,9 +245,43 @@ public class Task1 {
                     break;
                 case 3:
                     filtered.notebookArrayList = shop.filter();
+                    filterLogs.put(Integer.toString(countingFilter++),filtered);
                     System.out.println(filtered);
                     break;    
                 case 4:
+                    if (filterLogs.size() != 0) {
+                        System.out.println(filterLogs.keySet());
+                        System.out.printf("Выберите номер - ");
+                        inputLogNum = inputData.next();
+                        System.out.println(filterLogs.get(inputLogNum));
+                    } else {
+                        Message("Журнал пуст - не произвели ни одной фильтрации.");
+                    }
+                    break;
+                case 5:
+                    if (filterLogs.size() != 0) {
+                        System.out.println(filterLogs.keySet());
+                        System.out.println("Выберите номер - ");
+
+                        inputLogNum = inputData.next();
+                        Shop againFiltered = filterLogs.get(inputLogNum);
+                        
+                        System.out.println("Было выбранно:");
+                        System.out.println(againFiltered);
+                        againFiltered.notebookArrayList = againFiltered.filter();
+                        String isAvailableKey = "";
+                        for (int i = 1; i < 10; i++) {
+                            isAvailableKey = String.format("%s.%s",inputLogNum, i);
+                            if (!filterLogs.containsKey(isAvailableKey)) {
+                                filterLogs.put(isAvailableKey, againFiltered);
+                                break;
+                            }
+                        }
+                    } else {
+                        Message("Журнал пуст - не произвели ни одной фильтрации.");
+                    } 
+                    break;
+                case 6:
                     inputData.close();
                     System.exit(0);
                 default:
@@ -278,10 +293,22 @@ public class Task1 {
     }
 
     private static void ActionsMenu() {
-        System.out.println("1. Вывести все ноутбуки");
-        System.out.println("2. Вывести все ноутбуки для Markdown");
-        System.out.println("3. Отсортировать по критериям");
-        System.out.println("4. Выход");
-
+        Message("1. Вывести все ноутбуки\n"+
+                "2. Вывести все для Markdown таблицы\n"+
+                "3. Отфильтровать по критериям\n"+
+                "4. Журнал прошлых поисков по критериям\n"+
+                "5. Отфильтровать прошлый поиск\n"+
+                "6. Выход");
     }
+
+    private static String repeat(int count, String with) {
+        return new String(new char[count]).replace("\0", with);
+    }
+
+    private static void Message(String text) {
+        System.out.println(repeat(80, "="));
+        System.out.println(text);
+        System.out.println(repeat(80, "="));
+    }
+    
 }
