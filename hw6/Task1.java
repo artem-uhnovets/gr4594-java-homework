@@ -40,7 +40,7 @@ import HomeWorks.hw6.Shop.Notebook;
 
 // import HomeWorks.hw6.Shop.Notebook;
 
-class Shop {
+class Shop implements Cloneable {
     List<Notebook> notebookArrayList;
 
     static class Notebook{
@@ -83,6 +83,16 @@ class Shop {
         
 
     }
+
+    // @Override
+    // public Shop clone() {
+    //     Shop shopCloned = (Shop) this.clone();
+    //     Shop newShop = new Shop();
+    //     for (Notebook notebook : shopCloned.notebookArrayList) {
+    //         newShop.notebookArrayList.add(notebook);
+    //     }
+    //     return newShop;
+    // }
 
     @Override
     public String toString() {
@@ -215,7 +225,7 @@ class Shop {
 }
 
 public class Task1 {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 
         MenuMain();
 
@@ -225,11 +235,10 @@ public class Task1 {
         Scanner inputData = new Scanner(System.in);
         Shop shop = new Shop();
         shop.insertRandom(100);
-        Shop filtered = new Shop();
+        // Shop filtered = new Shop();
         int inputAction = -1;
         int countingFilter = 1;
         Map<String, Shop> filterLogs = new HashMap<>();
-        // int inputLogNum = -1;
         String inputLogNum = "";
 
         System.out.println("Добро пожаловать!");
@@ -244,61 +253,116 @@ public class Task1 {
                     shop.printMarkdownTable();
                     break;
                 case 3:
+                    Shop filtered = new Shop();
                     filtered.notebookArrayList = shop.filter();
                     filterLogs.put(Integer.toString(countingFilter++),filtered);
                     System.out.println(filtered);
                     break;    
                 case 4:
                     if (filterLogs.size() != 0) {
-                        System.out.println(filterLogs.keySet());
-                        System.out.printf("Выберите номер - ");
-                        inputLogNum = inputData.next();
-                        System.out.println(filterLogs.get(inputLogNum));
+                        
+                        // System.out.println(repeat(80, "="));
+                        // System.out.println("Доступные прошлые поиски по номера:");
+                        // System.out.println(filterLogs.keySet());
+                        // System.out.println("");
+                        // System.out.println(repeat(80, "="));
+                        // System.out.printf("Выберите номер - ");
+                        // inputLogNum = inputData.next();
+                        // System.out.println("Было выбранно:");
+
+                        // System.out.println(filterLogs.get(inputLogNum));
+
+                        System.out.println(logsJournal(filterLogs));
                     } else {
                         Message("Журнал пуст - не произвели ни одной фильтрации.");
                     }
                     break;
                 case 5:
                     if (filterLogs.size() != 0) {
-                        System.out.println(filterLogs.keySet());
-                        System.out.println("Выберите номер - ");
+                        // System.out.println(repeat(80, "="));
+                        // System.out.println("Доступные прошлые поиски по номера:");
+                        // System.out.println(filterLogs.keySet());
+                        // System.out.println("");
+                        // System.out.println(repeat(80, "="));
+                        // System.out.printf("Выберите номер - ");
+                        // inputLogNum = inputData.next();
 
-                        inputLogNum = inputData.next();
-                        Shop againFiltered = filterLogs.get(inputLogNum);
+                        Shop againFiltered = logsJournal(filterLogs);
+                        String keyToPutMap = "";
+                        // System.out.println("Было выбранно:");
+                        // System.out.println(againFiltered);
+
+                        // againFiltered.notebookArrayList = againFiltered.filter();
+                        // System.out.println(againFiltered);
+                        // filterLogs.put(inputLogNum, againFiltered);
                         
-                        System.out.println("Было выбранно:");
-                        System.out.println(againFiltered);
-                        againFiltered.notebookArrayList = againFiltered.filter();
-                        String isAvailableKey = "";
-                        for (int i = 1; i < 10; i++) {
-                            isAvailableKey = String.format("%s.%s",inputLogNum, i);
-                            if (!filterLogs.containsKey(isAvailableKey)) {
-                                filterLogs.put(isAvailableKey, againFiltered);
-                                break;
+                        for (String key : filterLogs.keySet()) {
+                            if (filterLogs.get(key).equals(againFiltered)) {
+                                keyToPutMap = key;
+                                System.out.println(keyToPutMap);
+                                System.out.println(key);
                             }
                         }
+
+                        System.out.println("Было выбранно:");
+                        System.out.println(againFiltered);
+
+                        againFiltered.notebookArrayList = againFiltered.filter();
+                        System.out.println(againFiltered);
+                        filterLogs.put(keyToPutMap, againFiltered);
+
                     } else {
                         Message("Журнал пуст - не произвели ни одной фильтрации.");
                     } 
                     break;
                 case 6:
+                    if (filterLogs.size() != 0) {
+                        // System.out.println(repeat(80, "="));
+                        // System.out.println("Доступные прошлые поиски по номера:");
+                        // System.out.println(filterLogs.keySet());
+                        // System.out.println("");
+                        // System.out.println(repeat(80, "="));
+                        // System.out.printf("Выберите номер - ");
+                        // inputLogNum = inputData.next();
+
+                        // filterLogs.get(inputLogNum).printMarkdownTable();
+                        logsJournal(filterLogs).printMarkdownTable();
+                    } else {
+                        Message("Журнал пуст - не произвели ни одной фильтрации.");
+                    }
+                    break;
+                case 7:
                     inputData.close();
                     System.exit(0);
                 default:
                     System.out.println("Ошибка!");
                     break;
             }
-        }
-        
+        }        
+    }
+
+    private static Shop logsJournal(Map<String, Shop> filterLogs) {
+        Scanner inputData = new Scanner(System.in);
+
+        System.out.println(repeat(80, "="));
+        System.out.println("Доступные прошлые поиски по номера:");
+        System.out.println(filterLogs.keySet());
+        System.out.println("");
+        System.out.println(repeat(80, "="));
+
+        System.out.printf("Выберите номер - ");
+        String inputLogNum = inputData.next();
+        return filterLogs.get(inputLogNum);
     }
 
     private static void ActionsMenu() {
         Message("1. Вывести все ноутбуки\n"+
-                "2. Вывести все для Markdown таблицы\n"+
+                "2. Вывести все в формате Markdown таблицы\n"+
                 "3. Отфильтровать по критериям\n"+
-                "4. Журнал прошлых поисков по критериям\n"+
+                "4. Журнал прошлых поисков\n"+
                 "5. Отфильтровать прошлый поиск\n"+
-                "6. Выход");
+                "6. Вывести прошлый поиск\n   в формате Markdown таблицы\n"+
+                "7. Выход");
     }
 
     private static String repeat(int count, String with) {
