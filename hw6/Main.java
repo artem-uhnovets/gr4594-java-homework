@@ -35,7 +35,7 @@ import java.util.Scanner;
 import HomeWorks.hw6.Shop.Notebook;
 
 public class Main {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws Exception {       
 
         MenuMain();
 

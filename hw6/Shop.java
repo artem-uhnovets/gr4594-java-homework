@@ -85,7 +85,27 @@ public class Shop implements Cloneable {
             row = notebook.toString().replaceAll(" ", "|");
             System.out.println(row);
         }
-    } 
+    }
+    
+    public Notebook get(int index) {
+        return this.notebookArrayList.get(index); 
+    }
+
+    public Integer getIndex(Notebook notebook) {
+        int index = -1;
+        for (Notebook notebookFromArr : this.notebookArrayList) {
+            index++;
+            if (notebook.equals(notebookFromArr)) {
+                break;
+            }
+        }
+        return index;
+    }
+
+    public Shop set(Notebook notebook) {
+        this.notebookArrayList.add(notebook);
+        return this;
+    }
 
     public List<Notebook> insertRandom(int quantity) {
         Notebook[] notebooksRnd = new Notebook[quantity];
